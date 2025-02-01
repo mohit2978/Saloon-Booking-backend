@@ -30,5 +30,19 @@ public class UserController {
         }
         throw new RuntimeException("User Not Found");
     }
+    @PutMapping("/update/{id}")
+    public User updateUser( @RequestBody User user,
+                           @PathVariable Long id){
+        Optional<User>user1= userRepository.findById(id);
+        if(user1.isEmpty()){
+            throw new RuntimeException("User Not Found");
+        }
+        User existingUser= user1.get();
+        existingUser.setRole(user.getRole());
+        existingUser.setUserName(user.getUserName());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setEmail(user.getEmail());
+        return userRepository.save(existingUser);
+    }
 
 }
