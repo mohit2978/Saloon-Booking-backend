@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 
@@ -15,6 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)//automatically generate id
     private Long id;
 
+    @NotBlank(message = "User name is mandatory")
     private String userName;
 
     @NotBlank(message = "Email is mandatory")
@@ -23,10 +26,13 @@ public class User {
 
     private String phone;
 
+    @NotBlank(message = "Role is mandatory")
     private String role;
 
+    @CreationTimestamp
     private LocalDate createdAt;
 
+    @UpdateTimestamp
     private LocalDate updatedAt;
 
     @NotBlank(message = "Password is mandatory")
