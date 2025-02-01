@@ -2,6 +2,7 @@ package com.magma.userService.Controller;
 
 import com.magma.userService.Repository.UserRepository;
 import com.magma.userService.modal.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping("/create")
-    User createUser(@RequestBody User user){
+    User createUser(@RequestBody @Valid User user){
         return userRepository.save(user);
     }
     @GetMapping("/getAllUsers")
