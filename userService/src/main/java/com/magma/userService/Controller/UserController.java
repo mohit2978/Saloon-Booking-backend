@@ -1,5 +1,6 @@
 package com.magma.userService.Controller;
 
+import com.magma.userService.Exception.UserException;
 import com.magma.userService.Repository.UserRepository;
 import com.magma.userService.modal.User;
 import jakarta.validation.Valid;
@@ -33,10 +34,10 @@ public class UserController {
     }
     @PutMapping("/update/{id}")
     public User updateUser( @RequestBody User user,
-                           @PathVariable Long id){
+                           @PathVariable Long id) throws Exception{
         Optional<User>user1= userRepository.findById(id);
         if(user1.isEmpty()){
-            throw new RuntimeException("User Not Found");
+            throw new UserException("User Not Found");
         }
         User existingUser= user1.get();
         existingUser.setRole(user.getRole());
