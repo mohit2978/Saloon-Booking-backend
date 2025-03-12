@@ -2,59 +2,57 @@ package com.magma.userService.Controller;
 
 import com.magma.userService.Exception.UserException;
 import com.magma.userService.Repository.UserRepository;
+import com.magma.userService.Service.UserService;
 import com.magma.userService.modal.User;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+     private final UserService userService;
 
     @PostMapping("/create")
-    User createUser(@RequestBody @Valid User user){
-        return userRepository.save(user);
+    public ResponseEntity<User> createUser(@RequestBody @Valid User user){
+        User createdUser=userService.createUser(user);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
+
     @GetMapping("/getAllUsers")
-    List<User>getAllUsers(){
-        return userRepository.findAll();
+    public ResponseEntity<List<User>>getAllUsers()
+    {
+        List<User>userList=userService.getAllUsers();
+        return new ResponseEntity<>( userList,HttpStatus.OK);
     }
+
     @GetMapping("/getUser/{Id}")
-    User getUserById(@PathVariable("Id") Long id){
-        Optional<User>user= userRepository.findById(id);
-        if(user.isPresent()){
-            return user.get();
-        }
-        throw new RuntimeException("User Not Found");
+   ResponseEntity<User> getUserById(@PathVariable("Id") Long id){
+
+        User user=userService.getUserById(id);
+        return new ResponseEntity<>(user,HttpStatus.OK);
+
     }
     @PutMapping("/update/{id}")
-    public User updateUser( @RequestBody User user,
+    public ResponseEntity<User> updateUser( @RequestBody User user,
                            @PathVariable Long id) throws Exception{
-        Optional<User>user1= userRepository.findById(id);
-        if(user1.isEmpty()){
-            throw new UserException("User Not Found");
-        }
-        User existingUser= user1.get();
-        existingUser.setRole(user.getRole());
-        existingUser.setUserName(user.getUserName());
-        existingUser.setPhone(user.getPhone());
-        existingUser.setEmail(user.getEmail());
-        return userRepository.save(existingUser);
+     User updatedUser=userService.updateUser(id,user);
+     return new ResponseEntity<>(updatedUser,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id){
-        Optional<User>user= userRepository.findById(id);
-        if(user.isEmpty()){
-            throw new RuntimeException("User Not Found");
-        }
-        userRepository.deleteById(id);
-        return "User Deleted Successfully";
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+       userService.deleteUser(id);
+       return new ResponseEntity<>("User Deleted",HttpStatus.ACCEPTED);
     }
 
 }
