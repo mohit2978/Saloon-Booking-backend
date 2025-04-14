@@ -11,11 +11,11 @@ public interface SalonService {
     // userDTO is user who is owner of salon
     Salon createSalon(SalonDTO salon, UserDTO user);
 
-    Salon updateSalon(SalonDTO salon, UserDTO user,Long salonid);
+    Salon updateSalon(SalonDTO salon, UserDTO user,Long salonid) throws Exception;
 
     List<Salon> getAllSalons();
 
-    Salon getSalonById(Long salonid);
+    Salon getSalonById(Long salonid) throws Exception;
 
     Salon getSalonByOwnerId(Long ownerId);
 

@@ -8,6 +8,7 @@ public class HomeController {
 
     @GetMapping("/test")
     public String methodTest(){
+
         return "In Saloon Microservice";
     }
 
