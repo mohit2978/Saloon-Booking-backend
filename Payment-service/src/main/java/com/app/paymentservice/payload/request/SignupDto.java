@@ -1,6 +1,7 @@
 package com.app.paymentservice.payload.request;
 
-import com.zosh.domain.UserRole;
+
+import com.app.paymentservice.domain.UserRole;
 import lombok.Data;
 
 @Data

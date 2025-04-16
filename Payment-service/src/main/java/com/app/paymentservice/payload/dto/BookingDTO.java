@@ -1,6 +1,7 @@
 package com.app.paymentservice.payload.dto;
 
-import com.zosh.domain.BookingStatus;
+
+import com.app.paymentservice.domain.BookingStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
