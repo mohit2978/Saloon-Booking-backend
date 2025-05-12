@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/Service-offering/pom.xml" />
         <option value="$PROJECT_DIR$/SaloonMicroService/pom.xml" />
         <option value="$PROJECT_DIR$/categoryMicroService/pom.xml" />
+        <option value="$PROJECT_DIR$/ApiGateway/pom.xml" />
       </list>
     </option>
   </component>
