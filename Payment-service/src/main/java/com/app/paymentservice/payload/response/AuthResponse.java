@@ -1,7 +1,8 @@
 package com.app.paymentservice.payload.response;
 
+import com.app.paymentservice.domain.UserRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.zosh.domain.UserRole;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
