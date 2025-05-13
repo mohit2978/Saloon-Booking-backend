@@ -1,6 +1,7 @@
 package com.app.paymentservice.service.Impl;
 
 import com.app.paymentservice.domain.PaymentMethod;
+import com.app.paymentservice.domain.PaymentOrderStatus;
 import com.app.paymentservice.modal.PaymentOrder;
 import com.app.paymentservice.payload.dto.BookingDTO;
 import com.app.paymentservice.payload.dto.UserDTO;
@@ -107,19 +108,21 @@ public class PaymentServiceImpl implements Paymentservice {
             if(paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)){
 
                 RazorpayClient razorpay = new RazorpayClient(apiKey, apiSecret);
-                Payment payment = razorpay.payments.fetch(paymentId);
+                Payment payment = razorpay.payments.fetch(paymentId);//razorpay api
 
                 Integer amount = payment.get("amount");
                 String status = payment.get("status");
 
-                if(status.equals("captured")){
-                    notificationEventProducer.sentNotificationEvent(
-                            paymentOrder.getBookingId(),
-                            paymentOrder.getUserId(),
-                            paymentOrder.getSalonId()
-                    );
+                if(status.equals("captured")){//Payment is success
 
-                    bookingEventProducer.sentBookingUpdateEvent(paymentOrder);
+//                    notificationEventProducer.sentNotificationEvent(
+//                            paymentOrder.getBookingId(),
+//                            paymentOrder.getUserId(),
+//                            paymentOrder.getSalonId()
+//                    );
+                    // to send notification
+
+   //                 bookingEventProducer.sentBookingUpdateEvent(paymentOrder); //to update booking
 
                     paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
                     paymentOrderRepository.save(paymentOrder);
@@ -131,7 +134,7 @@ public class PaymentServiceImpl implements Paymentservice {
                 return false;
             }
             else {
-
+                //for stripe
                 paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
                 paymentOrderRepository.save(paymentOrder);
 
@@ -144,7 +147,8 @@ public class PaymentServiceImpl implements Paymentservice {
     }
 
     @Override
-    public PaymentLink createRazorpayPaymentLink(UserDTO user, Long Amount, Long orderId) throws RazorpayException {
+    public PaymentLink createRazorpayPaymentLink(UserDTO user, Long Amount, Long orderId)
+            throws RazorpayException {
         Long amount = Amount * 100;
         try {
             // Instantiate a Razorpay client with your key ID and secret

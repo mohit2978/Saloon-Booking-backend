@@ -13,9 +13,13 @@ public interface Paymentservice {
 
     PaymentLinkResponse createOrder(UserDTO user, BookingDTO booking, PaymentMethod paymentMethod) throws RazorpayException, StripeException;
 
-    PaymentOrder getPaymentOrderById(Long id);
+    PaymentOrder getPaymentOrderById(Long id) throws Exception;
 
-    PaymentOrder getPaymentOrderByPaymentId(String paymentId);
+    PaymentOrder getPaymentOrderByPaymentId(String paymentId) throws Exception;
+
+    Boolean ProceedPaymentOrder(PaymentOrder paymentOrder,
+                                String paymentId,
+                                String paymentLinkId) throws RazorpayException;
 
     PaymentLink createRazorpayPaymentLink(UserDTO user, Long Amount, Long orderId) throws RazorpayException;
 
