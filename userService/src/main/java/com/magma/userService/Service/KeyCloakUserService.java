@@ -195,22 +195,14 @@ public class KeyCloakUserService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Authorization",  token);
 
-
         // Create an HttpEntity with the headers
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
             // Send the GET request
-            ResponseEntity<KeycloakUserinfo> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    KeycloakUserinfo.class
-            );
-
+            ResponseEntity<KeycloakUserinfo> response = restTemplate.exchange(url, HttpMethod.GET, entity, KeycloakUserinfo.class);
             // Extract and return the first user object
             return response.getBody();
-
         } catch (Exception e) {
             System.out.println("Failed to fetch user details: " + e.getMessage());
             throw new Exception("Failed to fetch user details: " + e.getMessage());

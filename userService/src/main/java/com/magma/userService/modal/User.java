@@ -1,9 +1,7 @@
 package com.magma.userService.modal;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.magma.userService.domain.UserRole;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -14,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,30 +21,34 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)//automatically generate id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "User name is mandatory")
-    private String userName;
+    @NotBlank(message = "full name is mandatory")
+    private String fullName;
 
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "username is mandatory")
+    private String username;
+
+    @Column(nullable = false, unique = true)
     @NotBlank(message = "Email is mandatory")
-    @Email(message = "please provide a valid email")
+    @Email(message = "Email should be valid")
     private String email;
 
     private String phone;
 
-    @NotBlank(message = "Role is mandatory")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role = UserRole.CUSTOMER;
 
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     @UpdateTimestamp
-    private LocalDate updatedAt;
-
-    @NotBlank(message = "Password is mandatory")
-    private String password;
-
+    private LocalDateTime updatedAt;
 
 
 }

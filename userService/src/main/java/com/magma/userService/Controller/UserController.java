@@ -1,6 +1,8 @@
 package com.magma.userService.Controller;
 
 import com.magma.userService.Exception.UserException;
+import com.magma.userService.Mapper.UserMapper;
+import com.magma.userService.Payload.DTO.UserDTO;
 import com.magma.userService.Repository.UserRepository;
 import com.magma.userService.Service.UserService;
 import com.magma.userService.modal.User;
@@ -19,40 +21,43 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-     private final UserService userService;
 
-    @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user){
-        User createdUser=userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    private final UserService userService;
+    private final UserMapper userMapper;
+
+
+
+    @GetMapping("/api/users/profile")
+    public ResponseEntity<UserDTO> getUserFromJwtToken(
+            @RequestHeader("Authorization") String jwt) throws Exception {
+
+        User user = userService.getUserFromJwtToken(jwt);
+        UserDTO userDTO=userMapper.mapToDTO(user);
+
+
+        return new ResponseEntity<>(userDTO,HttpStatus.OK);
     }
 
-    @GetMapping("/getAllUsers")
-    public ResponseEntity<List<User>>getAllUsers()
-    {
-        List<User>userList=userService.getAllUsers();
-        return new ResponseEntity<>( userList,HttpStatus.OK);
+    @GetMapping("/api/users/{userId}")
+    public ResponseEntity<UserDTO> getUserById(
+            @PathVariable Long userId
+    ) throws UserException {
+        User user = userService.getUserById(userId);
+        if(user==null) {
+            throw new UserException("User not found");
+        }
+        UserDTO userDTO=userMapper.mapToDTO(user);
+
+        return new ResponseEntity<>(userDTO,HttpStatus.OK);
     }
 
-    @GetMapping("/getUser/{Id}")
-   ResponseEntity<User> getUserById(@PathVariable("Id") Long id){
+    @GetMapping("/api/users")
+    public ResponseEntity<List<User>> getUsers(
+    ) throws UserException {
+        List<User> users = userService.getAllUsers();
 
-        User user=userService.getUserById(id);
-        return new ResponseEntity<>(user,HttpStatus.OK);
-
-    }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<User> updateUser( @RequestBody User user,
-                           @PathVariable Long id) throws Exception{
-     User updatedUser=userService.updateUser(id,user);
-     return new ResponseEntity<>(updatedUser,HttpStatus.OK);
+        return new ResponseEntity<>(users,HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id){
-       userService.deleteUser(id);
-       return new ResponseEntity<>("User Deleted",HttpStatus.OK);
-    }
 
 }
